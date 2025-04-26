@@ -1,5 +1,7 @@
+import gdown
 import joblib
 import logging
+import os
 
 # Setup logging
 logging.basicConfig(
@@ -11,7 +13,27 @@ logging.basicConfig(
     ]
 )
 
+# Google Drive file IDs
+COSINE_SIM_FILE_ID = '1QPkZsaCsGl9yrZYi3hMxyJ7fMLTdG1XO'
+DF_CLEANED_FILE_ID = '1jJGqYT0vgdpyknbDzxThq7aDrZsw9uin'
+
+# Function to download files from Google Drive
+def download_files():
+    logging.info("🔁 Downloading data files from Google Drive...")
+
+    # Download the files if they don't already exist
+    if not os.path.exists('df_cleaned.pkl'):
+        gdown.download(f'https://drive.google.com/uc?id={DF_CLEANED_FILE_ID}', 'df_cleaned.pkl', quiet=False)
+    if not os.path.exists('cosine_sim.pkl'):
+        gdown.download(f'https://drive.google.com/uc?id={COSINE_SIM_FILE_ID}', 'cosine_sim.pkl', quiet=False)
+    logging.info("✅ Files downloaded successfully.")
+
+# Download the files
+download_files()
+
+# Load the downloaded files
 logging.info("🔁 Loading data...")
+
 try:
     df = joblib.load('df_cleaned.pkl')
     cosine_sim = joblib.load('cosine_sim.pkl')
